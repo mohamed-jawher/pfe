@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .dashboard-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link.active {
+            background-color: #f8fafc;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: #f59e0b;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+
+        {{> artisanSidebar active="dashboard"}}
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Welcome Section -->
+            <div class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-800 mb-2">مرحباً بك، {{user.name}} 👋</h1>
+                    <p class="text-slate-600">نتمنى لك يوماً مثمراً</p>
+                </div>
+                <div class="flex space-x-4 space-x-reverse">
+                    <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 flex items-center">
+                        <i class="fas fa-bell text-yellow-500 ml-2"></i>
+                        <span class="text-sm">الإشعارات</span>
+                    </button>
+                    <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-sm hover:bg-yellow-600 flex items-center">
+                        <i class="fas fa-plus ml-2"></i>
+                        <span class="text-sm">إضافة خدمة</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <i class="fas fa-tools text-blue-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">الخدمات المقدمة</h3>
+                            <p class="text-3xl font-bold text-blue-600">{{stats.services}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-100 rounded-full">
+                            <i class="fas fa-star text-green-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">التقييمات</h3>
+                            <p class="text-3xl font-bold text-green-600">{{stats.rating}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-yellow-100 rounded-full">
+                            <i class="fas fa-users text-yellow-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">العملاء</h3>
+                            <p class="text-3xl font-bold text-yellow-600">{{stats.clients}}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-purple-100 rounded-full">
+                            <i class="fas fa-calendar-check text-purple-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">المواعيد</h3>
+                            <p class="text-3xl font-bold text-purple-600">{{stats.appointments}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activities -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-8">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4">آخر النشاطات</h3>
+                <div class="space-y-4">
+                    {{#if activities.length}}
+                        {{#each activities}}
+                            {{#if (eq this.type "review")}}
+                            <div class="flex items-start p-3 border-r-4 border-blue-500 bg-blue-50 rounded-lg">
+                                <div class="p-2 bg-blue-100 rounded-full ml-4">
+                                    <i class="fas fa-comment text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">تقييم جديد</h4>
+                                    <p class="text-sm text-gray-600">قام {{this.user_name}} بإضافة تقييم {{this.rating}} نجوم {{#if this.text}}({{this.text}}){{/if}}</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{formatDate this.created_at}}</p>
+                                </div>
+                            </div>
+                            {{else if (eq this.type "booking")}}
+                            <div class="flex items-start p-3 border-r-4 border-yellow-500 bg-yellow-50 rounded-lg">
+                                <div class="p-2 bg-yellow-100 rounded-full ml-4">
+                                    <i class="fas fa-calendar text-yellow-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">موعد جديد</h4>
+                                    <p class="text-sm text-gray-600">تم حجز موعد جديد من {{this.user_name}} {{#if this.text}}({{this.text}}){{/if}}</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{formatDate this.created_at}}</p>
+                                </div>
+                            </div>
+                            {{/if}}
+                        {{/each}}
+                    {{else}}
+                        <p class="text-center text-gray-500 py-4">لا توجد نشاطات حديثة</p>
+                    {{/if}}
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">عن TN M3allim</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    مهمتنا الأساسية في TN M3allim تكمن في ربط الحرفيين ذوي الخبرة العالية بالأفراد الذين يحتاجون إلى
+                    مهاراتهم. نحن نؤمن و نثق في مهارة حرفيينا في الوطن العربي وتأثيرها في خلق عمل ذو جودة عالية يشهد بها
+                    الزبون نفسه.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-4">
+                    <button class="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors flex items-center">
+                        <i class="fas fa-user-edit ml-2"></i>
+                        تحديث الملف الشخصي
+                    </button>
+                    <button class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors flex items-center">
+                        <i class="fas fa-plus-circle ml-2"></i>
+                        إضافة خدمة جديدة
+                    </button>
+                    <button class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                        <i class="fas fa-question-circle ml-2"></i>
+                        مركز المساعدة
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Services Chart
+            const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+            const servicesChart = new Chart(servicesCtx, {
+                type: 'bar',
+                data: {
+                    labels: {{{json chartData.months}}},
+                    datasets: [{
+                        label: 'عدد الخدمات',
+                        data: {{{json chartData.bookings}}},
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Ratings Chart
+            const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
+            const ratingsChart = new Chart(ratingsCtx, {
+                type: 'line',
+                data: {
+                    labels: {{{json chartData.months}}},
+                    datasets: [{
+                        label: 'متوسط التقييم',
+                        data: {{{json chartData.ratings}}},
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        });
+        
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+            });
+        }
+    </script>
+</body>
+
+</html>

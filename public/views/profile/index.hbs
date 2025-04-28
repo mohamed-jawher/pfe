@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        /* Add this line for Alpine.js */
+        [x-cloak] { display: none !important; }
+        
+        .profile-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .input-focus {
+            transition: all 0.2s ease-in-out;
+        }
+        .input-focus:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+ink o l        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link.active {
+            background-color: #f8fafc;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: #f59e0b;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans" x-data="app()">
+    <div class="flex min-h-screen">
+        <!-- Include the sidebar partial with active page set to 'profile' -->
+        {{> artisanSidebar active="profile"}}
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <div class="max-w-5xl mx-auto">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-slate-800">الملف الشخصي</h1>
+                    <p class="text-slate-600 mt-2">قم بتحديث معلوماتك الشخصية وإدارة حسابك</p>
+                </div>
+
+                <!-- Profile Form -->
+                <form @submit.prevent="submitForm" class="space-y-8">
+                    <!-- Profile Photo Section -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-camera text-blue-500 ml-2"></i>
+                            الصورة الشخصية
+                        </h2>
+                        <div class="flex flex-col items-center">
+                            <div class="relative group">
+                                <!-- Update the img src attribute in the profile photo section -->
+                                <img :src="formData.profilePhoto.preview || userData.photo || '/img/avatar-placeholder.png'" 
+                                     class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover cursor-pointer"
+                                     @click="document.getElementById('profilePhotoInput').click()">
+                                
+                                <div class="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                    <i class="fas fa-camera text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <input type="file" id="profilePhotoInput" class="hidden" accept="image/*" @change="uploadProfilePhoto">
+                            <div class="mt-4 flex gap-2">
+                                <button type="button" @click="document.getElementById('profilePhotoInput').click()" 
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                                    <i class="fas fa-upload ml-2"></i>
+                                    تغيير الصورة
+                                </button>
+                                <button type="button" @click="removeProfilePhoto" 
+                                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center"
+                                        :disabled="!formData.profilePhoto.preview && !userData.photo">
+                                    <i class="fas fa-trash ml-2"></i>
+                                    إزالة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Information -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-info-circle text-blue-500 ml-2"></i>
+                            معلومات عامة
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">البريد الإلكتروني</label>
+                                <input type="email" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.email" disabled>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الإسم الكامل</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.fullname" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">رقم الهاتف</label>
+                                <input type="tel" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.phone" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">العنوان</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.address">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-4">تغيير كلمة المرور</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">كلمة المرور الحالية</label>
+                                    <input type="password" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                           x-model="formData.currentPassword">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">كلمة المرور الجديدة</label>
+                                    <input type="password" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                           x-model="formData.newPassword">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">تأكيد كلمة المرور</label>
+                                    <input type="password" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                           x-model="formData.confirmPassword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Artisan Information (only shown for artisans) -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm" x-show="userData.role == 'artisan'">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-tools text-blue-500 ml-2"></i>
+                            معلومات الحرفي
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">المهنة</label>
+                                <select class="w-full p-3 border rounded-lg input-focus bg-gray-50" x-model="formData.profession">
+                                    <option value="">اختر المهنة</option>
+                                    <option value="plumber">سباك</option>
+                                    <option value="electrician">كهربائي</option>
+                                    <option value="carpenter">نجار</option>
+                                    <option value="painter">دهان</option>
+                                    <option value="builder">بناء</option>
+                                    <option value="tiler">مبلط</option>
+                                    <option value="gardener">بستاني</option>
+                                    <option value="cleaner">عامل نظافة</option>
+                                    <option value="other">أخرى</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2" x-cloak x-show="formData.profession === 'other'">
+                                <label class="block font-medium text-gray-700">حدد المهنة</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.otherProfession">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">سنوات الخبرة</label>
+                                <input type="number" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.experience" min="0">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">سعر الخدمة (بالدينار)</label>
+                                <input type="number" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.hourlyRate" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="block font-medium text-gray-700">وصف الخدمات</label>
+                            <textarea class="w-full p-3 border rounded-lg input-focus bg-gray-50 h-32" 
+                                      x-model="formData.description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Location Information -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-map-marker-alt text-blue-500 ml-2"></i>
+                            الموقع
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الولاية</label>
+                                <select class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                        x-model="formData.governorate">
+                                    <option value="">اختر الولاية</option>
+                                    <option value="tunis">تونس</option>
+                                    <option value="ariana">أريانة</option>
+                                    <option value="ben_arous">بن عروس</option>
+                                    <option value="manouba">منوبة</option>
+                                    <option value="nabeul">نابل</option>
+                                    <option value="zaghouan">زغوان</option>
+                                    <option value="bizerte">بنزرت</option>
+                                    <option value="beja">باجة</option>
+                                    <option value="jendouba">جندوبة</option>
+                                    <option value="kef">الكاف</option>
+                                    <option value="siliana">سليانة</option>
+                                    <option value="sousse">سوسة</option>
+                                    <option value="monastir">المنستير</option>
+                                    <option value="mahdia">المهدية</option>
+                                    <option value="sfax">صفاقس</option>
+                                    <option value="kairouan">القيروان</option>
+                                    <option value="kasserine">القصرين</option>
+                                    <option value="sidi_bouzid">سيدي بوزيد</option>
+                                    <option value="gabes">قابس</option>
+                                    <option value="medenine">مدنين</option>
+                                    <option value="tataouine">تطاوين</option>
+                                    <option value="gafsa">قفصة</option>
+                                    <option value="tozeur">توزر</option>
+                                    <option value="kebili">قبلي</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">المدينة</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.city">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الرمز البريدي</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.postalCode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Section (only for artisans) -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm" x-show="userData.role == 'artisan'">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-images text-blue-500 ml-2"></i>
+                            معرض الأعمال
+                        </h2>
+                        <!-- Gallery Section -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <!-- Gallery Section -->
+                            <template x-for="(image, index) in formData.gallery" :key="index">
+                                <div class="relative group aspect-square bg-gray-50 rounded-xl overflow-hidden">
+                                    <img :src="image.preview || `/uploads/gallery/${image.image_path}`" 
+                                         class="w-full h-full object-cover"
+                                         @error="console.log('Image load error:', image); $event.target.src = '/img/placeholder.jpg'">
+                                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        <button type="button" class="p-2 bg-white rounded-full text-red-500 hover:text-red-700"
+                                                @click="removeImage(index)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
+                                 @click="document.getElementById('galleryInput').click()">
+                                <div class="text-center">
+                                    <i class="fas fa-plus text-gray-400 text-2xl mb-2"></i>
+                                    <p class="text-sm text-gray-500">إضافة صورة</p>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="file" id="galleryInput" class="hidden" accept="image/*" multiple @change="uploadGalleryImages">
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div x-show="message.text" :class="`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`">
+                        <p x-text="message.text"></p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <button type="submit" 
+                                class="bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+                                :disabled="loading">
+                            <i class="fas fa-spinner fa-spin ml-2" x-show="loading"></i>
+                            <i class="fas fa-save ml-2" x-show="!loading"></i>
+                            <span x-text="loading ? 'جاري الحفظ...' : 'حفظ التغييرات'"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function app() {
+            return {
+                loading: false,
+                message: {
+                    text: '',
+                    type: 'success'
+                },
+                userData: {
+                    id: {{user.id}},
+                    role: "{{user.role}}",
+                    name: "{{userProfile.name}}",
+                    email: "{{userProfile.email}}",
+                    phone: "{{userProfile.phone}}",
+                    address: "{{userProfile.address}}",
+                    photo: "{{userProfile.photo}}",
+                    governorate: "{{userProfile.governorate}}",
+                    city: "{{userProfile.city}}",
+                    postalCode: "{{userProfile.postal_code}}",
+                    profession: "{{artisanProfile.profession}}",
+                    experience: {{#if artisanProfile.experience}}{{artisanProfile.experience}}{{else}}0{{/if}},
+                    hourlyRate: {{#if artisanProfile.hourly_rate}}{{artisanProfile.hourly_rate}}{{else}}0{{/if}},
+                    description: "{{artisanProfile.description}}",
+                    gallery: [
+                        {{#each gallery}}
+                        {
+                            id: {{this.id}},
+                            filename: "{{this.filename}}",
+                            preview: null
+                        },
+                        {{/each}}
+                    ]
+                },
+                formData: {
+                    email: '',
+                    fullname: '',
+                    phone: '',
+                    address: '',
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: '',
+                    profilePhoto: {
+                        file: null,
+                        preview: null,
+                        remove: false
+                    },
+                    governorate: '',
+                    city: '',
+                    postalCode: '',
+                    profession: '',
+                    otherProfession: '',
+                    experience: 0,
+                    hourlyRate: 0,
+                    description: '',
+                    gallery: [],
+                    galleryToRemove: []
+                },
+                
+                init() {
+                    // Initialize form data from user data
+                    this.formData = {
+                        ...this.formData,
+                        email: this.userData.email || '',
+                        fullname: this.userData.name || '',
+                        phone: this.userData.phone || '',
+                        address: this.userData.address || '',
+                        governorate: this.userData.governorate || '',
+                        city: this.userData.city || '',
+                        postalCode: this.userData.postalCode || '',
+                        profession: this.userData.profession || '',
+                        experience: this.userData.experience || 0,
+                        hourlyRate: this.userData.hourlyRate || 0,
+                        description: this.userData.description || '',
+                        gallery: [...(this.userData.gallery || [])],
+                        galleryToRemove: []
+                    };
+                    
+                    // Add this line to fetch profile data when component initializes
+                    this.fetchProfileData();
+                    console.log('Initial userData:', this.userData);
+                    console.log('Initial formData:', this.formData);
+                    
+                    // Handle profession type
+                    if (this.userData.role === 'artisan') {
+                        const predefinedProfessions = ['plumber', 'electrician', 'carpenter', 'painter', 'builder', 'tiler', 'gardener', 'cleaner'];
+                        
+                        if (!predefinedProfessions.includes(this.formData.profession)) {
+                            this.formData.otherProfession = this.formData.profession;
+                            this.formData.profession = 'other';
+                        }
+                    }
+                },
+                
+                uploadProfilePhoto(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.formData.profilePhoto = {
+                            file: file,
+                            preview: URL.createObjectURL(file),
+                            remove: false
+                        };
+                    }
+                },
+                
+                removeProfilePhoto() {
+                    this.formData.profilePhoto = {
+                        file: null,
+                        preview: null,
+                        remove: true
+                    };
+                },
+                
+                uploadGalleryImages(event) {
+                    const files = event.target.files;
+                    for (let file of files) {
+                        this.formData.gallery.push({
+                            file: file,
+                            preview: URL.createObjectURL(file),
+                            isNew: true
+                        });
+                    }
+                },
+                
+                removeImage(index) {
+                    const image = this.formData.gallery[index];
+                    
+                    // If it's an existing image, mark it for removal
+                    if (image.id) {
+                        this.formData.galleryToRemove.push(image.id);
+                    }
+                    
+                    // If it has a preview URL, revoke it
+                    if (image.preview) {
+                        URL.revokeObjectURL(image.preview);
+                    }
+                    
+                    // Remove from gallery array
+                    this.formData.gallery.splice(index, 1);
+                },
+                
+                async fetchProfileData() {
+                    try {
+                        // Existing profile data fetch
+                        const response = await fetch('/profile/data');
+                        const result = await response.json();
+                        
+                        // Fetch gallery images
+                        const galleryResponse = await fetch('/profile/gallery');
+                        const galleryResult = await galleryResponse.json();
+                        
+                        // Add console logs to inspect gallery data
+                        console.log('Gallery Response:', galleryResult);
+                        
+                        if (result) {
+                            // Update form data with fetched data
+                            this.formData = {
+                                ...this.formData,
+                                email: result.email || '',
+                                fullname: result.name || '',
+                                phone: result.phone || '',
+                                address: result.address || '',
+                                governorate: result.governorate || '',
+                                city: result.city || '',
+                                postalCode: result.postal_code || '',
+                            };
+                        
+                            // Update artisan specific data if available
+                            if (result.artisan) {
+                                this.formData = {
+                                    ...this.formData,
+                                    profession: result.artisan.spécialité || '',
+                                    experience: result.artisan.expérience || 0,
+                                    hourlyRate: result.artisan.tarif_horaire || 0,
+                                    description: result.artisan.description || '',
+                                };
+                            }
+                        
+                            // Update user data with the base64 photo
+                            this.userData = {
+                                ...this.userData,
+                                photo: result.photo_profile, // This will now be a base64 string
+                                role: result.rôle || this.userData.role
+                            };
+                       
+                            // Update gallery mapping in fetchProfileData
+                            this.formData.gallery = galleryResult.map(item => ({
+                            id: item.id,
+                            image_path: item.filename,  // Changed from filename to image_path
+                            preview: item.preview || null,
+                            isNew: false
+                            }));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                },
+                
+                async submitForm() {
+                    this.loading = true;
+                    this.message = { text: '', type: 'success' };
+                    
+                    // Validate password if changing
+                    if (this.formData.newPassword || this.formData.confirmPassword || this.formData.currentPassword) {
+                        if (!this.formData.currentPassword) {
+                            this.message = { text: 'يرجى إدخال كلمة المرور الحالية', type: 'error' };
+                            this.loading = false;
+                            return;
+                        }
+                        
+                        if (this.formData.newPassword !== this.formData.confirmPassword) {
+                            this.message = { text: 'كلمة المرور الجديدة وتأكيدها غير متطابقين', type: 'error' };
+                            this.loading = false;
+                            return;
+                        }
+                    }
+                    
+                    // Create FormData object for file uploads
+                    const formData = new FormData();
+                    
+                    // Add basic profile data
+                    formData.append('fullname', this.formData.fullname);
+                    formData.append('phone', this.formData.phone);
+                    formData.append('address', this.formData.address);
+                    formData.append('governorate', this.formData.governorate);
+                    formData.append('city', this.formData.city);
+                    formData.append('postalCode', this.formData.postalCode);
+                    
+                    // Add password data if changing
+                    if (this.formData.newPassword) {
+                        formData.append('currentPassword', this.formData.currentPassword);
+                        formData.append('newPassword', this.formData.newPassword);
+                    }
+                    
+                    // Add profile photo if changing
+                    if (this.formData.profilePhoto.file) {
+                        formData.append('profilePhoto', this.formData.profilePhoto.file);
+                    }
+                    
+                    if (this.formData.profilePhoto.remove) {
+                        formData.append('removeProfilePhoto', 'true');
+                    }
+                    
+                    // Add artisan-specific data if applicable
+                    if (this.userData.role === 'artisan') {
+                        formData.append('profession', this.formData.profession === 'other' ? this.formData.otherProfession : this.formData.profession);
+                        formData.append('experience', this.formData.experience);
+                        formData.append('hourlyRate', this.formData.hourlyRate);
+                        formData.append('description', this.formData.description);
+                        
+                        // Add gallery images to remove
+                        if (this.formData.galleryToRemove.length > 0) {
+                            formData.append('galleryToRemove', JSON.stringify(this.formData.galleryToRemove));
+                        }
+                        
+                        // Add new gallery images
+                        this.formData.gallery.forEach(image => {
+                            if (image.isNew && image.file) {
+                                formData.append('galleryImages', image.file);
+                            }
+                        });
+                    }
+                    
+                    try {
+                        const response = await fetch('/update-profile', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok) {
+                            this.message = { text: 'تم تحديث الملف الشخصي بنجاح', type: 'success' };
+                            
+                            // Reset password fields
+                            this.formData.currentPassword = '';
+                            this.formData.newPassword = '';
+                            this.formData.confirmPassword = '';
+                            
+                            // Reload page after 2 seconds to show updated data
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            this.message = { text: result.error || 'حدث خطأ أثناء تحديث الملف الشخصي', type: 'error' };
+                        }
+                    } catch (error) {
+                        console.error('Error updating profile:', error);
+                        this.message = { text: 'حدث خطأ في الاتصال بالخادم', type: 'error' };
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
+

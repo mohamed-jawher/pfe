@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة المستخدمين - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dataTables_wrapper .dataTables_filter { float: left; }
+        .dataTables_wrapper .dataTables_length { float: right; }
+        .dataTables_wrapper .dataTables_info { float: right; }
+        .dataTables_wrapper .dataTables_paginate { float: left; }
+    </style>
+</head>
+
+<body class="bg-slate-100 font-sans flex h-screen flex-col md:flex-row">
+    {{> adminSidebar}}
+
+    <main class="flex-1 p-4 md:p-8 mt-16 md:mt-0 overflow-auto">
+        <!-- Header Section -->
+        <div class="mb-6">
+            <h2 class="text-3xl font-bold text-slate-800">قائمة المستخدمين</h2>
+            <p class="text-slate-500 mt-2">إدارة وعرض جميع المستخدمين في النظام</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-50 rounded-full">
+                        <i class="fas fa-users text-blue-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">إجمالي المستخدمين</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{totalUsers}}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-50 rounded-full">
+                        <i class="fas fa-user-check text-green-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">المستخدمين النشطين</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{activeUsers}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-50 rounded-full">
+                        <i class="fas fa-user-clock text-yellow-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">مستخدمين جدد</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{newUsers}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-list text-slate-400"></i>
+                        <h3 class="text-lg font-semibold text-slate-800">جميع المستخدمين</h3>
+                    </div>
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200">
+                        <i class="fas fa-plus"></i>
+                        إضافة مستخدم جديد
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table id="clientTable" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">الرقم</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">الاسم</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">البريد الإلكتروني</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">الإجراءات</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#clientTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/ar.json'
+                },
+                ajax: {
+                    url: "/admin/users-data",
+                    data: function(d) {
+            d.role = 'client';
+            
+        },
+        dataSrc: function(json) {
+                        return json.map(function(item) {
+                            return {
+                                ...item,
+                                rating: parseFloat(item.rating || 0).toFixed(1),
+                                specialite: item.specialite || 'غير محدد'
+                            };
+                        });
+                    }
+                },
+                columns: [
+                    { 
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: "nom" },
+                    { data: "email" },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="viewUser('${row.id}')" class="text-blue-600 hover:text-blue-900">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button onclick="deleteUser('${row.id}')" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                responsive: true,
+                order: [[0, 'asc']],
+                pageLength: 10
+            });
+        });
+    </script>
+</body>
+</html>

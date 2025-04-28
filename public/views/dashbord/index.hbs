@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-slate-100 font-sans flex h-screen flex-col md:flex-row">
+    {{> adminSidebar}}
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 md:p-8 mt-16 md:mt-0 overflow-auto">
+        <div x-data="{ currentPage: 'dashboard' }">
+            <!-- Dashboard Overview -->
+            <template x-if="currentPage === 'dashboard'">
+                <div class="space-y-6">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-blue-100 text-blue-500">
+                                    <i class="fas fa-users text-2xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold">المستخدمين</h3>
+                                    <p class="text-3xl font-bold" id="usersCount">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-yellow-100 text-yellow-500">
+                                    <i class="fas fa-tools text-2xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold">الحرفيين</h3>
+                                    <p class="text-3xl font-bold" id="artisansCount">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-green-100 text-green-500">
+                                    <i class="fas fa-calendar-check text-2xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold">الحجوزات</h3>
+                                    <p class="text-3xl font-bold" id="bookingsCount">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-red-100 text-red-500">
+                                    <i class="fas fa-exclamation-triangle text-2xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold">التقارير</h3>
+                                    <p class="text-3xl font-bold" id="reportsCount">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="bg-white rounded-lg shadow">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold mb-4">النشاطات الأخيرة</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التاريخ</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المستخدم</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">النشاط</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="activitiesTable" class="bg-white divide-y divide-gray-200">
+                                        <!-- Activities will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Other sections templates will be added here -->
+        </div>
+    </main>
+
+    <script>
+        function switchPage(page) {
+            document.querySelector('[x-data]').__x.$data.currentPage = page;
+        }
+
+        function logout() {
+            window.location.href = '/admin/logout';
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/admin/dashboard-data');
+                const data = await response.json();
+                
+                // Update counts
+                document.getElementById('usersCount').textContent = data.usersCount;
+                document.getElementById('artisansCount').textContent = data.artisansCount;
+                document.getElementById('bookingsCount').textContent = data.bookingsCount;
+                document.getElementById('reportsCount').textContent = data.reportsCount;
+                
+                // Update activities table
+                const activitiesHtml = data.recentActivities.map(activity => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${formatDate(activity.date)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.user}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.action}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${activity.status === 'completed' ? 'green' : 'yellow'}-100 text-${activity.status === 'completed' ? 'green' : 'yellow'}-800">
+                                ${activity.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('activitiesTable').innerHTML = activitiesHtml;
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Format date helper function
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('ar-TN').format(date);
+        }
+
+        // Load initial data
+        loadDashboardData();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدماتنا - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .service-card {
+            transition: transform 0.3s ease-in-out;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    {{> header}}
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-yellow-50 to-yellow-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-4">خدماتنا المتميزة</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">نقدم مجموعة واسعة من الخدمات الحرفية عالية الجودة لتلبية جميع احتياجاتك</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Keep all service cards as they are -->
+            <!-- Electrical Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-2xl text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات كهربائية</h3>
+                    <p class="text-gray-600 mb-4">تركيب وصيانة جميع أنواع التمديدات الكهربائية بأيدي خبراء متخصصين</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تمديدات كهربائية منزلية
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            صيانة الأجهزة الكهربائية
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تركيب أنظمة الإضاءة
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Plumbing Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-faucet text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات السباكة</h3>
+                    <p class="text-gray-600 mb-4">حلول متكاملة لجميع مشاكل السباكة والصرف الصحي</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            إصلاح تسربات المياه
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تركيب وصيانة المواسير
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            صيانة السخانات
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Carpentry Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-brown-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-hammer text-2xl text-yellow-800"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات النجارة</h3>
+                    <p class="text-gray-600 mb-4">تصميم وتنفيذ جميع أعمال النجارة والأثاث المنزلي</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تصنيع الأثاث المنزلي
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تركيب الأبواب والنوافذ
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            صيانة وترميم الأثاث
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Painting Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-paint-roller text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات الدهان</h3>
+                    <p class="text-gray-600 mb-4">دهانات داخلية وخارجية بأحدث التقنيات والألوان</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            دهانات داخلية
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            دهانات خارجية
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            دهانات ديكورية
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HVAC Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-wind text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات التكييف</h3>
+                    <p class="text-gray-600 mb-4">تركيب وصيانة جميع أنواع أجهزة التكييف والتبريد</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تركيب المكيفات
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            صيانة دورية
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            إصلاح الأعطال
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cleaning Services -->
+            <div class="service-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-broom text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">خدمات التنظيف</h3>
+                    <p class="text-gray-600 mb-4">خدمات تنظيف شاملة للمنازل والمكاتب والمباني</p>
+                    <ul class="space-y-2 text-gray-600 mb-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تنظيف المنازل
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تنظيف المكاتب
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            تنظيف السجاد والمفروشات
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> footer}}
+
+    <!-- Chatbase Script -->
+    <script>
+        (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="yEG4DJMs1tC-Gv3P3TKnA";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+    </script>
+</body>
+</html>

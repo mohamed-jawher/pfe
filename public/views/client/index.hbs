@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="img/logo.png">
+    <meta name="generator" content="Astro v4.8.7">
+    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
+    <title>TN M3allim</title>
+    <link rel="canonical" href="https://astroship.web3templates.com/">
+    <meta name="description" content="Astroship هو قالب موقع بداية لـ Astro مبني باستخدام TailwindCSS.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Astroship - قالب بداية لـ Astro">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://astroship.web3templates.com/opengraph.jpg">
+    <meta property="og:url" content="https://astroship.web3templates.com/">
+    <meta property="og:image:url" content="https://astroship.web3templates.com/opengraph.jpg">
+    <meta property="og:image:alt" content="لقطة شاشة لصفحة Astroship الرئيسية">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@web3templates">
+    <meta name="twitter:creator" content="@surjithctly">
+    <link rel="stylesheet" href="/about.DRv9-Cvf.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.23/dist/tailwind.min.css" rel="stylesheet">
+
+
+    <!-- Owl Carousel CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+        rel="stylesheet">
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- WOW.js for animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .artisan-card {
+            transition: transform 0.3s ease-in-out;
+        }
+        .artisan-card:hover {
+            transform: translateY(-5px);
+        }
+        .rating-stars {
+            color: #FFD700;
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .review-card {
+            transition: all 0.3s ease;
+        }
+        .review-card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    {{> loginPrompt}}
+    <div class="max-w-screen-xl mx-auto px-5">
+        {{> header }}
+        <!-- Global Search Section -->
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="flex flex-col items-center text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">ابحث عن الحرفي المناسب</h1>
+                <p class="text-gray-600 mb-6">اكتشف أفضل الحرفيين في منطقتك</p>
+            </div>
+            <!-- Search input -->
+            <div class="relative">
+                <div class="flex items-center">
+                    <input type="text" 
+                           id="searchInput"
+                           placeholder="ابحث عن حرفي، مهنة، أو خدمة..." 
+                           class="w-full p-4 pr-12 text-lg border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    <button onclick="applyFilters()" class="bg-yellow-500 text-white px-8 py-4 rounded-r-lg hover:bg-yellow-600 transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button onclick="toggleFilters()" 
+                        class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>خيارات التصفية</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div id="filtersPanel" class="max-w-7xl mx-auto px-4 py-8 hidden transition-all duration-300">
+            <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">خيارات التصفية</h2>
+                    <button onclick="toggleFilters()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700 mb-2">الدولة</label>
+                        <select class="country w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" id="country">
+                            <option value="">اختر الدولة</option>
+                        </select>
+
+                        <label for="state" class="block text-sm font-medium text-gray-700 mt-4 mb-2">الولاية</label>
+                        <select class="state w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" id="state" disabled>
+                            <option value="">اختر الولاية</option>
+                        </select>
+
+                        <label for="city" class="block text-sm font-medium text-gray-700 mt-4 mb-2">المدينة</label>
+                        <select class="city w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" id="city" disabled>
+                            <option value="">اختر المدينة</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="hobby" class="block text-sm font-medium text-gray-700 mb-2">الحرفة</label>
+                        <select id="hobby" name="hobby"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500">
+                            <option value="all">جميع الحرف</option>
+                            <option value="building">أعمال البناء الإسمنتية</option>
+                            <option value="gypsum">أعمال الجبس والديكور الداخلي</option>
+                            <option value="marble">تركيب الرخام</option>
+                            <option value="ceramic">تركيب السيراميك و الزليج</option>
+                            <option value="wooden_floor">تركيب و إصلاح الأرضيات الخشبية</option>
+                            <option value="swimming_pool">صيانة أحواض السباحة</option>
+                            <option value="painter">حرفي الصباغة</option>
+                            <option value="water_pipes">إصلاح أنابيب المياه</option>
+                            <option value="sewage">إصلاح قنوات الصرف الصحي</option>
+                            <option value="aluminum">أعمال الألمنيوم</option>
+                            <option value="woodworking">أعمال نجارة الخشب</option>
+                            <option value="welding">أعمال الحدادة و التلحيم</option>
+                            <option value="glass">تركيب و إصلاح الزجاج</option>
+                            <option value="window_cleaning">تنظيف نوافذ العمارات</option>
+                            <option value="carpet_cleaning">تنظيف الزرابي و الأفرشة</option>
+                            <option value="house_cleaning">أعمال التنظيف المنزلية</option>
+                            <option value="electricity">كهرباء المنازل</option>
+                            <option value="satellite_reception">تركيب و إصلاح أجهزة الإستقبال الفضائية</option>
+                            <option value="solar_panels">تركيب و إصلاح ألواح الطاقة الشمسية</option>
+                            <option value="air_conditioning_install">تركيب مكيفات الهواء</option>
+                            <option value="air_conditioning_repair">إصلاح مكيفات الهواء</option>
+                            <option value="furniture_moving">نقل الأثات المنزلي</option>
+                            <option value="goods_delivery">نقل و توصيل البضائع</option>
+                            <option value="locksmith">صانع و مصلح الأقفال</option>
+                            <option value="elderly_care">رعاية المسنين</option>
+                            <option value="child_care">حضانة الأطفال</option>
+                            <option value="patient_care">رعاية مريض</option>
+                            <option value="housemaid">عاملة منزلية</option>
+                            <option value="cooking">أعمال الطبخ</option>
+                            <option value="gardening">البستنة و رعاية الحديقة</option>
+                            <option value="private_driver">سائق سيارة خاص</option>
+                            <option value="night_guard">حراسة ليلية</option>
+                            <option value="private_security">رجل أمن خاص</option>
+                            <option value="fashion_sewing">خياطة الملابس العصرية</option>
+                            <option value="traditional_sewing">خياطة الملابس التقليدية</option>
+                            <option value="photographer">مصور</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">التقييم</label>
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="rating" id="rating-all" checked>
+                                <label for="rating-all">الكل</label>
+                                <input type="radio" name="rating" id="rating-4plus">
+                                <label for="rating-4plus">4+ نجوم</label>
+                                <input type="radio" name="rating" id="rating-3plus">
+                                <label for="rating-3plus">3+ نجوم</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">الحالة</label>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center gap-2">
+                                    <input type="checkbox" class="form-checkbox text-yellow-500">
+                                    <span>متاح حالياً</span>
+                                </label>
+                                <label class="flex items-center gap-2">
+                                    <input type="checkbox" class="form-checkbox text-yellow-500">
+                                    <span>خدمة 24/7</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-6">
+                     <button onclick="resetFilters()" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors mr-2">
+        إعادة تعيين
+    </button>
+                       <button onclick="applyFilters()" class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+        تطبيق التصفية
+    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleFilters() {
+                const filtersPanel = document.getElementById('filtersPanel');
+                filtersPanel.classList.toggle('hidden');
+            }
+        </script>
+
+
+
+       
+
+
+
+        
+
+        <!-- Keep and modify this container -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleView('grid')" class="view-toggle active" id="gridView">
+                        <i class="fas fa-th-large text-lg"></i>
+                    </button>
+                    <button onclick="toggleView('list')" class="view-toggle" id="listView">
+                        <i class="fas fa-list text-lg"></i>
+                    </button>
+                </div>
+                <div class="text-gray-600">
+                    إظهار <span id="startCount"></span>-<span id="endCount"></span> من <span id="totalCount"></span> حرفي
+                </div>
+            </div>
+
+            <!-- Single Container for Both Views -->
+            <div id="artisansContainer">
+                <!-- Grid View -->
+                <div id="gridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {{#each artisans}}
+                    <div class="artisan-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                        <div class="relative">
+                            <img src="{{#if this.photo_profile}}{{this.photo_profile}}{{else}}https://via.placeholder.com/400x300{{/if}}" 
+                                 class="w-full h-48 object-cover" alt="صورة الحرفي">
+                           <div class="absolute top-2 left-2 bg-white/90 px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+    <i class="fas fa-star text-yellow-400 mr-1"></i>
+    <span>{{#if this.rating}}{{this.rating}}{{else}}0.0{{/if}}</span>
+</div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{this.nom}}</h3>
+                                    <p class="text-sm text-gray-600">{{this.spécialité}}</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                    {{#if this.disponibilité}}متاح{{else}}غير متاح{{/if}}
+                                </span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-3">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>{{this.localisation}}</span>
+                            </div>
+                            <button onclick="showArtisanProfile({{this.id}})" 
+                                    class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition duration-300">
+                                عرض التفاصيل
+                            </button>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <!-- List View -->
+                <div id="listContainer" class="hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحرفي</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">التخصص</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الموقع</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">التقييم</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
+                                <th class="px-6 py-3 text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {{#each artisans}}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <img class="h-10 w-10 rounded-full" src="{{#if this.photo_profile}}{{this.photo_profile}}{{else}}https://via.placeholder.com/40{{/if}}" alt="">
+                                        <div class="mr-4">
+                                            <div class="text-sm font-medium text-gray-900">{{this.nom}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{this.spécialité}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{this.localisation}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                        <span>{{this.rating}}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    <div class="flex items-center">
+        <i class="fas fa-star text-yellow-400 mr-1"></i>
+        <span>{{#if this.rating}}{{this.rating}}{{else}}0.0{{/if}}</span>
+    </div>
+</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{#if this.disponibilité}}bg-green-100 text-green-800{{else}}bg-red-100 text-red-800{{/if}}">
+                                        {{#if this.disponibilité}}متاح{{else}}غير متاح{{/if}}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                    <button onclick="showArtisanProfile({{this.id}})" class="text-yellow-600 hover:text-yellow-900">عرض التفاصيل</button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+<!-- Pagination Component -->
+<div class="flex items-center justify-between bg-transparent px-4 py-3 sm:px-6 mt-6">
+    <div class="flex flex-1 justify-between sm:hidden">
+        <button onclick="previousPage()" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">السابق</button>
+        <button onclick="nextPage()" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">التالي</button>
+    </div>
+    <div class="hidden sm:flex sm:flex-1 sm:items-center justify-center ">
+        <div>
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                <button onclick="previousPage()" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                    <span class="sr-only">السابق</span>
+                    <i class="fas fa-chevron-right h-5 w-5"></i>
+                </button>
+                <div id="paginationNumbers" class="flex"></div>
+                <button onclick="nextPage()" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                    <span class="sr-only">التالي</span>
+                    <i class="fas fa-chevron-left h-5 w-5"></i>
+                </button>
+            </nav>
+        </div>
+    </div>
+</div>
+        <!-- Add this style to your existing styles -->
+        <style>
+            .view-toggle {
+                @apply p-2 text-gray-500 hover:text-gray-700 transition-colors;
+            }
+            .view-toggle.active {
+                @apply text-yellow-500;
+            }
+            .pagination-number {
+                @apply relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0;
+            }
+            .pagination-number.active {
+                @apply bg-yellow-500 text-white hover:bg-yellow-600;
+            }
+        </style>
+        
+        <!-- Add this script before the closing body tag -->
+        <script>
+              const artisans = {{{json artisans}}};
+            let currentView = 'grid';
+            let currentPage = 1;
+            const itemsPerPage = 9;
+            let totalItems = {{#if artisans}}{{artisans.length}}{{else}}0{{/if}};
+            let totalPages = Math.ceil(totalItems / itemsPerPage);
+       
+         
+           function toggleView(view) {
+  const gridContainer = document.getElementById('gridContainer');
+  const listContainer = document.getElementById('listContainer');
+  const gridViewBtn = document.getElementById('gridView');
+  const listViewBtn = document.getElementById('listView');
+
+  currentView = view;
+
+  const isGrid = view === 'grid';
+  gridContainer.classList.toggle('hidden', !isGrid);
+  listContainer.classList.toggle('hidden', isGrid);
+  gridViewBtn.classList.toggle('active', isGrid);
+  listViewBtn.classList.toggle('active', !isGrid);
+
+  updatePagination();
+}
+
+        
+            function updatePagination() {
+                const start = (currentPage - 1) * itemsPerPage + 1;
+                const end = Math.min(currentPage * itemsPerPage, totalItems);
+                
+                document.getElementById('startCount').textContent = start;
+                document.getElementById('endCount').textContent = end;
+                document.getElementById('totalCount').textContent = totalItems;
+        
+                const paginationNumbers = document.getElementById('paginationNumbers');
+                paginationNumbers.innerHTML = '';
+        
+                // Add pagination numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (
+                        i === 1 || // First page
+                        i === totalPages || // Last page
+                        (i >= currentPage - 1 && i <= currentPage + 1) // Pages around current page
+                    ) {
+                        const button = document.createElement('button');
+                        button.className = `relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                            i === currentPage 
+                                ? 'bg-yellow-500 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600' 
+                                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
+                        }`;
+                        button.textContent = i;
+                        button.onclick = () => goToPage(i);
+                        paginationNumbers.appendChild(button);
+                    } else if (
+                        (i === 2 && currentPage > 3) || 
+                        (i === totalPages - 1 && currentPage < totalPages - 2)
+                    ) {
+                        // Add ellipsis
+                        const ellipsis = document.createElement('span');
+                        ellipsis.className = 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300';
+                        ellipsis.textContent = '...';
+                        paginationNumbers.appendChild(ellipsis);
+                    }
+                }
+        
+                // Update visibility of items
+                const items = currentView === 'grid' 
+                    ? document.querySelectorAll('#gridContainer .artisan-card')
+                    : document.querySelectorAll('#listContainer tbody tr');
+        
+                items.forEach((item, index) => {
+                    const shouldShow = index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage;
+                    item.style.display = shouldShow ? '' : 'none';
+                });
+            }
+        
+            function previousPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            }
+        
+            function nextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            }
+        
+            function goToPage(page) {
+                currentPage = page;
+                updatePagination();
+            }
+        
+            // Initialize pagination on load
+            document.addEventListener('DOMContentLoaded', () => {
+                updatePagination();
+            });
+        </script>
+{{> chatbot}}
+
+        {{> footer }}
+
+        <!-- Artisan Profile Modal -->
+        <div id="artisanModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <!-- Profile Header -->
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex items-center space-x-4">
+<img src="/img/avatar-default.png" 
+             class="w-20 h-20 rounded-full object-cover" 
+             alt="صورة الحرفي"
+             onerror="this.src='/img/avatar-default.png'">
+
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-800">أحمد بن علي</h2>
+                                <p class="text-gray-600">كهربائي محترف</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="mr-2 text-gray-600">(4.5)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="closeArtisanProfile()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Profile Content -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left Column -->
+                        <div>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-semibold mb-2">معلومات الاتصال</h3>
+                                <div class="space-y-2">
+                                    <p class="flex items-center text-gray-600">
+                                        <i class="fas fa-phone-alt w-6"></i>
+                                        <span>+216 XX XXX XXX</span>
+                                    </p>
+                                    <p class="flex items-center text-gray-600">
+                                        <i class="fas fa-envelope w-6"></i>
+                                        <span>email@example.com</span>
+                                    </p>
+                                    <p class="flex items-center text-gray-600">
+                                        <i class="fas fa-map-marker-alt w-6"></i>
+                                        <span>تونس، أريانة</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold mb-4">الخبرات والمهارات</h3>
+                                <div class="space-y-2">
+                                    <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">تمديدات كهربائية</span>
+                                    <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">صيانة</span>
+                                    <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">تركيب إنارة</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4 mt-4">
+    <h3 class="text-lg font-semibold mb-4">معرض الأعمال</h3>
+    <div id="artisanGallery" class="grid grid-cols-2 gap-4">
+        <!-- Gallery images will be loaded here dynamically -->
+    </div>
+</div>
+                            <div class="bg-gray-50 rounded-lg p-4 mt-4">
+            <h3 class="text-lg font-semibold mb-4">حجز موعد</h3>
+            <form id="bookingForm" class="space-y-4">
+                <input type="hidden" id="artisanId" name="artisanId">
+                <div>
+                    <label class="block text-sm mb-2">التاريخ</label>
+                    <input type="date" id="bookingDate" name="date" 
+                           class="w-full p-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm mb-2">الوقت</label>
+                    <input type="time" id="bookingTime" name="time" 
+                           class="w-full p-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm mb-2">ملاحظات</label>
+                    <textarea id="bookingNotes" name="notes" 
+                            class="w-full p-2 border rounded-lg" rows="3"></textarea>
+                </div>
+                <button type="submit" 
+                        class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">
+                    تأكيد الحجز
+                </button>
+            </form>
+        </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-lg font-semibold mb-4">التقييمات والمراجعات</h3>
+            <div class="space-y-4">
+                <!-- Review Form -->
+                <div class="bg-white rounded-lg p-4 shadow-sm mb-4">
+                    <h4 class="text-lg font-semibold mb-2">أضف تقييمك</h4>
+                    <form id="reviewForm" class="space-y-4">
+                        <input type="hidden" id="reviewArtisanId" name="artisanId">
+                        <div class="mb-3">
+                            <div class="flex items-center space-x-2" id="ratingStars">
+                                <i class="far fa-star text-2xl cursor-pointer" data-rating="1"></i>
+                                <i class="far fa-star text-2xl cursor-pointer" data-rating="2"></i>
+                                <i class="far fa-star text-2xl cursor-pointer" data-rating="3"></i>
+                                <i class="far fa-star text-2xl cursor-pointer" data-rating="4"></i>
+                                <i class="far fa-star text-2xl cursor-pointer" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="ratingValue" name="rating" value="0">
+                        </div>
+                        <textarea id="reviewText" name="review" 
+                                class="w-full p-2 border rounded-lg" 
+                                rows="3" required 
+                                placeholder="اكتب تقييمك هنا..."></textarea>
+                        <button type="submit" 
+                                class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+                            إرسال التقييم
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Reviews Container -->
+                <div id="reviewsContainer" class="space-y-4">
+                    <!-- Reviews will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+ function showLoginPrompt() {
+        const modal = document.getElementById('loginPromptModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLoginPrompt() {
+        const modal = document.getElementById('loginPromptModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+        // Close Artisan Profile Modal
+        function closeArtisanProfile() {
+            const modal = document.getElementById('artisanModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+        function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    let starsHtml = '';
+    
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<i class="fas fa-star text-yellow-400"></i>';
+    }
+    
+    // Add half star if needed
+    if (hasHalfStar) {
+        starsHtml += '<i class="fas fa-star-half-alt text-yellow-400"></i>';
+    }
+    
+    // Add empty stars
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<i class="far fa-star text-yellow-400"></i>';
+    }
+    
+    return starsHtml;
+}
+        // Update showArtisanProfile function
+      async function showArtisanProfile(artisanId) {
+    try {
+      const [artisanResponse, galleryResponse] = await Promise.all([
+            fetch(`/get-artisan/${artisanId}`),
+            fetch(`/client/get-gallery/${artisanId}`)  // Updated path
+        ]);
+        
+        const artisan = await artisanResponse.json();
+        const gallery = await galleryResponse.json();
+      console.log(gallery);
+        // Update modal content with real data
+        const modal = document.getElementById('artisanModal');
+        const profileImage = modal.querySelector('img');
+       profileImage.src = artisan.photo_profile ? 
+            `data:image/jpeg;base64,${artisan.photo_profile}` : 
+            '/img/avatar-default.png';
+             profileImage.onerror = function() {
+            this.src = '/img/avatar-default.png';
+        };
+        modal.querySelector('h2').textContent = artisan.nom;
+        modal.querySelector('p').textContent = artisan.spécialité;
+        
+        // Calculate and update rating
+        const rating = parseFloat(artisan.rating || 0).toFixed(1);
+        const ratingStars = modal.querySelector('.rating-stars');
+        ratingStars.innerHTML = generateStars(rating);
+        ratingStars.nextElementSibling.textContent = `(${rating})`;
+        
+        // Update contact information (first .bg-gray-50 element)
+        const contactInfo = modal.querySelectorAll('.bg-gray-50')[0];
+        contactInfo.innerHTML = `
+            <h3 class="text-lg font-semibold mb-2">معلومات الاتصال</h3>
+            <div class="space-y-2">
+                <p class="flex items-center text-gray-600">
+                    <i class="fas fa-phone-alt w-6"></i>
+                    <span>${artisan.telephone || 'غير متوفر'}</span>
+                </p>
+                <p class="flex items-center text-gray-600">
+                    <i class="fas fa-envelope w-6"></i>
+                    <span>${artisan.email || 'غير متوفر'}</span>
+                </p>
+                <p class="flex items-center text-gray-600">
+                    <i class="fas fa-map-marker-alt w-6"></i>
+                    <span>${artisan.localisation || 'غير متوفر'}</span>
+                </p>
+            </div>
+        `;
+        
+        // Update experience section (second .bg-gray-50 element)
+        const experienceSection = modal.querySelectorAll('.bg-gray-50')[1];
+        experienceSection.innerHTML = `
+            <h3 class="text-lg font-semibold mb-4">الخبرات والمهارات</h3>
+            <div class="space-y-2">
+                <p class="text-gray-600">خبرة ${artisan.expérience || 0} سنوات</p>
+                <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">${artisan.spécialité}</span>
+            </div>
+        `;
+       const galleryContainer = document.getElementById('artisanGallery');
+        galleryContainer.innerHTML = gallery.length > 0 
+            ? gallery.map(image => `
+                <div class="relative aspect-square">
+                    <img src="${image.preview}" 
+                 class="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                 alt="صورة من معرض الأعمال"
+                 onerror="this.src='/img/placeholder.jpg'">
+                </div>
+            `).join('') 
+            : '<p class="text-gray-500 text-center">لا توجد صور في المعرض</p>';
+        // Set artisan ID for forms
+        document.getElementById('artisanId').value = artisanId;
+        document.getElementById('reviewArtisanId').value = artisanId;
+        
+        // Load reviews
+        loadArtisanReviews(artisanId);
+        
+        // Show modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'خطأ',
+            text: 'حدث خطأ أثناء تحميل البيانات'
+        });
+    }
+}
+
+        // Handle Rating Stars
+        document.querySelectorAll('#ratingStars .fa-star').forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.dataset.rating;
+                document.getElementById('ratingValue').value = rating;
+                
+                // Update stars visual
+                document.querySelectorAll('#ratingStars .fa-star').forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas', 'text-yellow-400');
+                    } else {
+                        s.classList.remove('fas', 'text-yellow-400');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+
+        // Handle Review Form Submission
+        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+        
+        if (!isLoggedIn) {
+            showLoginPrompt();
+            return;
+        }
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/submit-review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم',
+                        text: 'تم إرسال تقييمك بنجاح'
+                    });
+                    loadArtisanReviews(formData.get('artisanId'));
+                    e.target.reset();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء إرسال التقييم'
+                });
+            }
+        });
+
+        // Handle Booking Form Submission
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+        
+        if (!isLoggedIn) {
+            showLoginPrompt();
+            return;
+        }
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/book-artisan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم',
+                        text: 'تم حجز موعدك بنجاح'
+                    });
+                    e.target.reset();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء حجز الموعد'
+                });
+            }
+        });
+
+        // Load Artisan Reviews
+        async function loadArtisanReviews(artisanId) {
+            try {
+                const response = await fetch(`/get-reviews/${artisanId}`);
+                const reviews = await response.json();
+                
+                const container = document.getElementById('reviewsContainer');
+                container.innerHTML = reviews.map(review => `
+                    <div class="review-card bg-white rounded-lg p-4 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center">
+                                <img src="${review.user_photo || '/img/avatar-default.png'}" 
+                                     class="w-10 h-10 rounded-full mr-3" alt="صورة المستخدم">
+                                <div>
+                                    <h5 class="font-semibold">${review.user_name}</h5>
+                                    <div class="flex items-center">
+                                        ${generateStars(review.rating)}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-500">${formatDate(review.created_at)}</span>
+                        </div>
+                        <p class="text-gray-600">${review.review_text}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        }
+
+        // Helper function to generate star rating HTML
+        function generateStars(rating) {
+            return Array(5).fill('').map((_, i) => 
+                `<i class="fas fa-star ${i < rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`
+            ).join('');
+        }
+
+        // Helper function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.RelativeTimeFormat('ar').format(
+                Math.ceil((date - new Date()) / (1000 * 60 * 60 * 24)),
+                'day'
+            );
+        }
+    </script>
+</body>
+
+</html>
+<script>
+    let filteredArtisans = [...artisans];
+
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const selectedHobby = document.getElementById('hobby').value;
+        const rating = document.querySelector('input[name="rating"]:checked').id;
+        const isAvailableOnly = document.querySelector('input[type="checkbox"]').checked;
+        
+        filteredArtisans = artisans.filter(artisan => {
+            // Search term filter
+            const matchesSearch = 
+                artisan.nom.toLowerCase().includes(searchTerm) ||
+                artisan.spécialité.toLowerCase().includes(searchTerm) ||
+                artisan.localisation.toLowerCase().includes(searchTerm);
+
+            // Hobby filter
+            const matchesHobby = selectedHobby === 'all' || artisan.spécialité === selectedHobby;
+
+            // Rating filter
+            let matchesRating = true;
+            if (rating === 'rating-4plus') {
+                matchesRating = artisan.rating >= 4;
+            } else if (rating === 'rating-3plus') {
+                matchesRating = artisan.rating >= 3;
+            }
+
+            // Availability filter
+            const matchesAvailability = !isAvailableOnly || artisan.disponibilité;
+
+            return matchesSearch && matchesHobby && matchesRating && matchesAvailability;
+        });
+
+        // Reset pagination
+        currentPage = 1;
+        totalItems = filteredArtisans.length;
+        totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        // Update the display
+        updateDisplay();
+    }
+
+    function resetFilters() {
+        // Reset search input
+        document.getElementById('searchInput').value = '';
+        
+        // Reset hobby select
+        document.getElementById('hobby').value = 'all';
+        
+        // Reset rating
+        document.getElementById('rating-all').checked = true;
+        
+        // Reset checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Reset the filtered list
+        filteredArtisans = [...artisans];
+        currentPage = 1;
+        totalItems = artisans.length;
+        totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        // Update the display
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        // Update grid view
+        const gridContainer = document.getElementById('gridContainer');
+        const listContainer = document.getElementById('listContainer').querySelector('tbody');
+        
+        // Clear existing content
+        gridContainer.innerHTML = '';
+        listContainer.innerHTML = '';
+
+        // Add filtered items
+        filteredArtisans.forEach(artisan => {
+           
+            // Add grid view item
+            gridContainer.innerHTML += `
+                <div class="artisan-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative">
+                         <img src="${artisan.photo_profile ? `data:image/jpeg;base64,${artisan.photo_profile}` : '/img/avatar-default.png'}" 
+                 class="w-full h-48 object-cover" 
+                 alt="صورة الحرفي" 
+                 onerror="this.src='/img/avatar-default.png'">
+                        <div class="absolute top-2 left-2 bg-white/90 px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span>${artisan.rating || 0}</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">${artisan.nom}</h3>
+                                <p class="text-sm text-gray-600">${artisan.spécialité}</p>
+                            </div>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                ${artisan.disponibilité ? 'متاح' : 'غير متاح'}
+                            </span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>${artisan.localisation}</span>
+                        </div>
+                        <button onclick="showArtisanProfile(${artisan.id})" 
+                                class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition duration-300">
+                            عرض التفاصيل
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Add list view item
+            listContainer.innerHTML += `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                           <img class="h-10 w-10 rounded-full object-cover" 
+                     src="${artisan.photo_profile ? `data:image/jpeg;base64,${artisan.photo_profile}` : '/img/avatar-default.png'}" 
+                     alt="صورة الحرفي"
+                     onerror="this.src='/img/avatar-default.png'">
+                            <div class="mr-4">
+                                <div class="text-sm font-medium text-gray-900">${artisan.nom}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${artisan.spécialité}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${artisan.localisation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span>${artisan.rating || 0}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${artisan.disponibilité ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${artisan.disponibilité ? 'متاح' : 'غير متاح'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                        <button onclick="showArtisanProfile(${artisan.id})" class="text-yellow-600 hover:text-yellow-900">عرض التفاصيل</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        updatePagination();
+    }
+
+    // Add event listener for search input
+    document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+
+    // Debounce function to prevent too many updates
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Initialize the display
+    document.addEventListener('DOMContentLoaded', () => {
+        updateDisplay();
+    });
+</script>

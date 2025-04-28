@@ -1,0 +1,45 @@
+<aside class="w-full md:w-64 bg-gradient-to-b from-slate-800 to-yellow-500 text-white p-6 shadow-xl md:h-screen fixed md:relative z-10">
+    <h1 class="text-2xl font-extrabold text-center border-b pb-3">
+        TN <span class="text-yellow-500">M3allim</span>
+    </h1>
+
+    <div class="flex flex-col items-center my-6">
+        <img class="w-20 h-20 rounded-full border-4 border-white shadow-lg" src="/img/logo.png" alt="Admin">
+        <p class="mt-3 text-lg font-semibold">{{user.name}}</p>
+    </div>
+
+    <nav class="mt-5 space-y-2">
+        {{!-- <a href="/admin/dashboard"
+            class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition duration-200 w-full">
+            📊 <span class="ml-2">لوحة التحكم</span>
+        </a> --}}
+        <a href="/client-list"
+            class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition duration-200 w-full">
+            👥 <span class="ml-2">المستخدمين</span>
+        </a>
+        <a href="/artisan-list"
+            class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition duration-200 w-full">
+            🛠️ <span class="ml-2">الحرفيين</span>
+        </a>
+        <a href="/user-messages"
+            class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition duration-200 w-full">
+            📬 <span class="ml-2">رسائل المستخدمين</span>
+        </a>
+        <a href="https://analytics.google.com/analytics/web/?authuser=0#/p487292866/reports/dashboard?params=_u..nav%3Dmaui&r=reporting-hub"
+        class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition-colors duration-200 w-full"
+        target="_blank" rel="noopener noreferrer">
+            📈 <span class="ml-2">الإحصائيات</span>
+        </a>
+
+
+      
+        <a href="/admin/settings"
+            class="flex items-center p-3 bg-slate-700 hover:bg-yellow-500 rounded-lg transition duration-200 w-full">
+            ⚙️ <span class="ml-2">الإعدادات</span>
+        </a>
+        <a href="/admin/logout"
+            class="flex items-center p-3 bg-red-600 hover:bg-red-700 rounded-lg transition duration-200 w-full mt-4">
+            🚪 <span class="ml-2">تسجيل الخروج</span>
+        </a>
+    </nav>
+</aside>

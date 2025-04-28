@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد</title>
+    <!-- Ajouter la police Poppins depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Appliquer la police Poppins à tout le document */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-image: url('https://images.pexels.com/photos/33266/work-chinese-industrial-professional.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* Effet de flou sur l'arrière-plan */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            /* Appliquer un flou */
+            z-index: -1;
+        }
+
+        /* Conteneur pour les particules */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Style des particules */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        /* Animation des particules */
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translateY(-20vh) translateX(20vw) scale(1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.8;
+            }
+        }
+
+        /* Effet de flou et ombre pour le conteneur du formulaire */
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Style pour l'image de l'artisan */
+        .artisan-image {
+            background-image: url('https://images.pexels.com/photos/3825527/pexels-photo-3825527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            height: 200px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Effet de survol pour les boutons */
+        .hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animation pour les champs de formulaire */
+        .input-field {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Ajustements de typographie */
+        h2 {
+            font-weight: 600;
+            /* Poppins Semi-Bold */
+        }
+
+        p,
+        label,
+        input,
+        select,
+        button {
+            font-weight: 400;
+            /* Poppins Regular */
+        }
+
+        button {
+            font-weight: 500;
+            /* Poppins Medium */
+        }
+        select option {
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="flex justify-center items-center h-screen p-4">
+    <!-- Conteneur des particules -->
+    <div class="particles">
+        <!-- Génération de particules -->
+        <div class="particle" style="top: 10%; left: 20%; width: 10px; height: 10px; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 30%; left: 50%; width: 8px; height: 8px; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 50%; left: 70%; width: 12px; height: 12px; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 70%; left: 10%; width: 9px; height: 9px; animation-delay: 1s;"></div>
+        <div class="particle" style="top: 90%; left: 40%; width: 7px; height: 7px; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Conteneur du formulaire -->
+    <div class="form-container p-8 rounded-xl max-w-md w-full">
+        <h2 class="text-3xl font-extrabold text-center text-white">إنشاء حساب جديد</h2>
+        <p class="text-white/80 text-center mt-2">قم بإنشاء حساب جديد للبدء</p>
+
+        <form id="signupForm" class="mt-6 space-y-4">
+            <div>
+                <label class="block text-white/80 font-medium mb-1">الاسم الكامل</label>
+                <input type="text" name="name"
+                    class="w-full p-3 border border-white/30 bg-white/10 text-white rounded-lg focus:outline-none input-field placeholder-white/60"
+                    required>
+            </div>
+            <div>
+                <label class="block text-white/80 font-medium mb-1">البريد الإلكتروني</label>
+                <input type="email" name="email"
+                    class="w-full p-3 border border-white/30 bg-white/10 text-white rounded-lg focus:outline-none input-field placeholder-white/60"
+                    required>
+            </div>
+            <div>
+                <label class="block text-white/80 font-medium mb-1">كلمة المرور</label>
+                <input type="password" name="password"
+                    class="w-full p-3 border border-white/30 bg-white/10 text-white rounded-lg focus:outline-none input-field placeholder-white/60"
+                    required>
+            </div>
+            <div>
+                <label class="block text-white/80 font-medium mb-1">الوظيفة</label>
+                <select name="role"
+                    class="w-full p-3 border border-white/30 bg-white/10 text-white rounded-lg focus:outline-none input-field placeholder-white/60"
+                    required>
+                    <option value="client">حريف</option>
+                    <option value="artisan">حرفي</option>
+                </select>
+            </div>
+            <button type="submit"
+                class="w-full bg-yellow-500 text-white py-3 rounded-lg mt-4 hover-effect font-bold">تسجيل</button>
+        </form>
+
+        <p class="mt-4 text-center text-white">
+            لديك حساب بالفعل؟ <a href="/login" class="text-yellow-300 font-medium hover:text-yellow-500">تسجيل
+                الدخول</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch("/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "تم إنشاء الحساب بنجاح",
+                        text: "جاري التوجيه...",
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/login";
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "خطأ",
+                        text: result.message
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "خطأ في الاتصال",
+                    text: "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى."
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

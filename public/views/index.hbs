@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/img/logo.png"> <!-- Assuming img is served from public -->
+    <meta name="generator" content="Astro v4.8.7">
+    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
+    <title>{{title}}</title> <!-- Changed to Handlebars variable -->
+    <link rel="canonical" href="https://astroship.web3templates.com/">
+    <meta name="description" content="Astroship هو قالب موقع بداية لـ Astro مبني باستخدام TailwindCSS.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Astroship - قالب بداية لـ Astro">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://astroship.web3templates.com/opengraph.jpg">
+    <meta property="og:url" content="https://astroship.web3templates.com/">
+    <meta property="og:image:url" content="https://astroship.web3templates.com/opengraph.jpg">
+    <meta property="og:image:alt" content="لقطة شاشة لصفحة Astroship الرئيسية">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@web3templates">
+    <meta name="twitter:creator" content="@surjithctly">
+    <link rel="stylesheet" href="/about.DRv9-Cvf.css"> <!-- Assuming CSS is served from public -->
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.23/dist/tailwind.min.css" rel="stylesheet">
+
+
+    <!-- Owl Carousel CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+        rel="stylesheet">
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- WOW.js for animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <!-- <style>
+    .flag-link {
+        @apply w-12 h-12 rounded-full overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-110 shadow-md bg-white;
+    }
+    .flag-circle {
+        @apply w-full h-full object-cover rounded-full;
+    }
+</style> -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QQG5Q7EW4L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QQG5Q7EW4L');
+</script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        arabic: ['"Tajawal"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap">
+    
+</head>
+
+<body>
+    {{> header }} 
+
+    <div class="max-w-screen-xl mx-auto px-5">
+        <main
+            class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24 bg-gradient-to-r from-gray-50 to-white">
+            <div class="py-6 md:order-1 hidden md:block">
+                <picture>
+                    <source
+                        srcset="/img/logo.png, /_astro/hero.DlKDY3ml_Z2lV4Yd.webp 400w, /_astro/hero.DlKDY3ml_Z1VhsC8.webp 600w"
+                        type="image/webp" sizes="(max-width: 800px) 100vw, 620px">
+                    <img src="/img/logo.png"
+                        srcset="/_astro/hero.DlKDY3ml_Zb8dUS.png 200w, /_astro/hero.DlKDY3ml_1U3Pls.png 400w, /_astro/hero.DlKDY3ml_1b0qtt.png 600w"
+                        alt="رائد فضاء في الهواء" sizes="(max-width: 800px) 100vw, 620px" loading="eager" width="520"
+                        height="424" decoding="async"
+                        class="rounded-lg shadow-2xl hover:scale-105 transition-transform duration-300">
+                </picture>
+            </div>
+            <div class="px-6 lg:px-12">
+                <h1
+                    class="font-arabic text-4xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 leading-[1.5] text-rendering-optimizeLegibility">
+                    دليلك الخاص بالحرفيين
+                </h1>
+                <p class="text-lg mt-6 text-gray-700 max-w-xl leading-relaxed">
+                    هدفنا هو أن تَصِل إلى الحرفي المناسب مهما كانت الأعمال التي تريد القيام بها.
+                    <br><br>
+                    إذا كنت أنت الحرفي، قم بالتسجيل معنا حتى تتمكن من إضافة رقمك وصفحتك الخاصة على الفايسبوك أو
+                    الأنستغرام، وحتى إضافة قناتك على اليوتيوب.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                    <!-- زر الاشتراك المجاني -->
+
+                    <!-- Bouton "اشترك مجاني" -->
+                    {{#unless user}}
+                    <a href="/signup"
+                        class="rounded-lg text-center transition-all focus-visible:ring-2 ring-offset-2 ring-orange-200 px-6 py-3 border-2 border-orange-400 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:border-orange-500 shadow-lg hover:shadow-xl flex gap-2 items-center justify-center transform hover:scale-105 duration-300">
+                        <span>اشترك مجاني</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+               {{/unless}}
+                    
+
+                    <!-- Bouton "تبحث عن حرفي؟" -->
+                    <a href="viewport/"
+                        class="rounded-lg text-center transition-all focus-visible:ring-2 ring-offset-2 ring-orange-200 px-6 py-3 border-2 border-orange-400 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:border-orange-500 shadow-lg hover:shadow-xl flex gap-2 items-center justify-center transform hover:scale-105 duration-300">
+                        <span>تبحث عن حرفي؟</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+
+                </div>
+            </div>
+        </main>
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+                    الفئات الرئيسية
+                </h2>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- كهربائي -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-bolt text-4xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">كهربائي</h3>
+                    </div>
+
+                    <!-- تنظيف -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-broom text-4xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">تنظيف</h3>
+                    </div>
+
+                    <!-- إصلاح أنابيب -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-toolbox text-4xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">إصلاح أنابيب المياه</h3>
+                    </div>
+
+                    <!-- طباخة -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-utensils text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">طباخة</h3>
+                    </div>
+
+                    <!-- حفلات -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-music text-4xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">حفلات</h3>
+                    </div>
+
+                    <!-- ديكور -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+                        <div class="flex justify-center mb-4">
+                            <i class="fas fa-paint-roller text-4xl text-pink-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">ديكور</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- إضافة Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <section class="grid lg:grid-cols-2 place-items-center py-16 bg-gradient-to-r from-gray-50 to-white">
+            <!-- الصورة على اليسار -->
+            <div class="px-6 lg:px-12 order-2 lg:order-1">
+                <img src="https://images.pexels.com/photos/3811830/pexels-photo-3811830.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="حرفي يعمل" class="rounded-lg shadow-2xl hover:scale-105 transition-transform duration-300">
+            </div>
+
+            <!-- النص على اليمين -->
+            <div class="px-6 lg:px-12 order-1 lg:order-2">
+                <h2
+                    class="font-arabic text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 leading-tight tracking-normal">
+                    مهمتنا: توظيف الحرفيين
+                </h2>
+                <p class="mt-6 text-lg text-gray-700 leading-relaxed">
+                    مهمتنا الأساسية في دليل الحرفيين تكمن في ربط الحرفيين ذوي الخبرة العالية بالأفراد الذين يحتاجون إلى
+                    مهاراتهم. نحن نؤمن و نثق في مهارة حرفيينا في الوطن العربي وتأثيرها في خلق عمل ذو جودة عالية يشهد بها
+                    الزبون نفسه.
+                </p>
+                <p class="mt-4 text-lg text-gray-700 leading-relaxed">
+                    يتيح الموقع لكل حرفي التسجيل معنا مجانًا وإضافة اسمه إلى دليل الحرفيين، كما يساعد كل من يبحث عن حرفي
+                    الوصول إلى الحرفي المناسب والموثوق به في شتى المجالات.
+                </p>
+                <p class="mt-4 text-lg text-gray-700 leading-relaxed">
+                    نسعى من خلال موقعنا تقديم فرص عمل للحرفيين ذوي الخبرة العالية والمؤهلة لتقديم خدمة جيدة. فأي حرفي
+                    بإمكانه تحميل صور أعماله وإضافة صفحاته على وسائل التواصل الاجتماعي لتأكيد خبرته ومهاراته وكسب ثقة كل
+                    من يبحث ويحتاج إلى حرفي.
+                </p>
+                {{#unless user}}
+                <div class="mt-8">
+                    <a href="signup/"
+                        class="rounded-lg text-center transition-all focus-visible:ring-2 ring-offset-2 ring-blue-200 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl flex gap-2 items-center justify-center transform hover:scale-105 duration-300">
+                        <span>سجل الآن مجانًا</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+                {{/unless}}
+                <!-- Nouveau bouton "اقرأ المزيد" -->
+                <div class="mt-4">
+                    <a href="lireplus/"
+                        class="rounded-lg text-center transition-all focus-visible:ring-2 ring-offset-2 ring-orange-200 px-6 py-3 border-2 border-orange-400 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:border-orange-500 shadow-lg hover:shadow-xl flex gap-2 items-center justify-center transform hover:scale-105 duration-300">
+                        <span>اقرأ المزيد</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <!-- Service Start -->
+        <section class="py-12 bg-gray-100 mt-8 mb-8">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-extrabold text-gray-900">مميزات موقع دليل الحرفيين</h2>
+                    <p class="text-gray-600 mt-2">نحن نوفر لك أفضل الطرق للعثور على الحرفي المناسب بسهولة</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <!-- ميزة 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+                        <div class="flex justify-center items-center mb-4">
+                            <i class="fas fa-users text-blue-500 text-5xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-gray-900">تغطية شاملة للحرفيين</h4>
+                        <p class="text-gray-600 mt-2">يضم الموقع مختلف الحرفيين في مجالات متعددة لضمان تلبية جميع
+                            احتياجات العملاء.</p>
+                    </div>
+
+                    <!-- ميزة 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+                        <div class="flex justify-center items-center mb-4">
+                            <i class="fas fa-star text-yellow-500 text-5xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-gray-900">تقييمات موثوقة</h4>
+                        <p class="text-gray-600 mt-2">كل حرفي لديه تقييمات موثوقة من العملاء لضمان جودة الخدمة المقدمة.
+                        </p>
+                    </div>
+
+                    <!-- ميزة 3 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+                        <div class="flex justify-center items-center mb-4">
+                            <i class="fas fa-bullhorn text-red-500 text-5xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-gray-900">ترويج مجاني</h4>
+                        <p class="text-gray-600 mt-2">نوفر للحرفيين إمكانية عرض أعمالهم وروابط حساباتهم على وسائل
+                            التواصل الاجتماعي.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonial Section -->
+        <div class="container mx-auto py-16 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="text-center mb-10">
+                <h6 class="text-primary text-lg font-semibold bg-white inline-block px-4 py-2 rounded-full">آراء عملائنا
+                </h6>
+                <h1 class="text-3xl font-bold mt-4">ماذا يقول عملائنا!!!</h1>
+            </div>
+
+            <!-- Owl Carousel / Testimonial Container -->
+            <div class="testimonial-carousel flex flex-wrap justify-center gap-6">
+                <!-- Testimonial 1 -->
+                <div
+                    class="testimonial-item bg-white text-center border p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl max-w-xs w-full">
+                    <img class="bg-white rounded-full shadow-md p-2 mx-auto mb-4" src="/imgpersonnes/th (5).jpeg"
+                        alt="Client 1" style="width: 150px; height: 150px;">
+                    <!-- Assuming imgpersonnes is served from public -->
+                    <h5 class="text-xl font-semibold">أمين س.</h5>
+                    <p class="text-gray-500">تونس، تونس</p>
+                    <p class="mt-2 text-gray-600">"لقد استخدمت هذه المنصة منذ عدة أشهر، وقد غيرت تمامًا طريقة إدارة
+                        مهامي اليومية. إنها سهلة الاستخدام، سريعة، وفعالة للغاية! أوصي بها بشدة."</p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div
+                    class="testimonial-item bg-white text-center border p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl max-w-xs w-full">
+                    <img class="bg-white rounded-full shadow-md p-2 mx-auto mb-4" src="/imgpersonnes/th (3).jpeg"
+                        alt="Client 2" style="width: 150px; height: 150px;">
+                    <!-- Assuming imgpersonnes is served from public -->
+                    <h5 class="text-xl font-semibold">سارة أ.</h5>
+                    <p class="text-gray-500">الجزائر. الجزائر
+                    <p>
+                    <p class="mt-2 text-gray-600">"الموقع سهل الاستخدام وخدمة العملاء ممتازة. تمكنت من العثور على كل ما
+                        أحتاجه وكانت العملية سلسة. أوصي بها بشدة!"</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div
+                    class="testimonial-item bg-white text-center border p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl max-w-xs w-full">
+                    <img class="bg-white rounded-full shadow-md p-2 mx-auto mb-4" src="/imgpersonnes/th (2).jpeg"
+                        alt="Client 3" style="width: 150px; height: 150px;">
+                    <!-- Assuming imgpersonnes is served from public -->
+                    <h5 class="text-xl font-semibold">جوهر.غ</h5>
+                    <p class="text-gray-500">تونس.نابل ا</p>
+                    <p class="mt-2 text-gray-600">"تجربة رائعة! المنصة سهلة الاستخدام والأدوات المتاحة من الدرجة الأولى.
+                        لقد جعلت حياتي أكثر تنظيماً وأسهل بكثير!"</p>
+                </div>
+
+
+            </div>
+
+            <!-- Add extra space below the testimonials -->
+            <div class="py-8"></div> <!-- This adds extra padding below the carousel -->
+        </div>
+
+
+
+
+        <h3 class="text-xl font-bold text-center mb-6">الدول المدعومة</h3>
+        <div class="flex flex-wrap justify-center gap-8 mt-8 mb-8">
+            <a href="/وظائف-الحرفيين-السعودية" class="flag-link">
+                <img src="https://flagcdn.com/w40/sa.png" alt="السعودية"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-قطر" class="flag-link">
+                <img src="https://flagcdn.com/w40/qa.png" alt="قطر"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-الإمارات" class="flag-link">
+                <img src="https://flagcdn.com/w40/ae.png" alt="الإمارات"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-الكويت" class="flag-link">
+                <img src="https://flagcdn.com/w40/kw.png" alt="الكويت"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-مصر" class="flag-link">
+                <img src="https://flagcdn.com/w40/eg.png" alt="مصر"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-المغرب" class="flag-link">
+                <img src="https://flagcdn.com/w40/ma.png" alt="المغرب"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-الجزائر" class="flag-link">
+                <img src="https://flagcdn.com/w40/dz.png" alt="الجزائر"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-تونس" class="flag-link">
+                <img src="https://flagcdn.com/w40/tn.png" alt="تونس"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-ليبيا" class="flag-link">
+                <img src="https://flagcdn.com/w40/ly.png" alt="ليبيا"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-موريتانيا" class="flag-link">
+                <img src="https://flagcdn.com/w40/mr.png" alt="موريتانيا"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-العراق" class="flag-link">
+                <img src="https://flagcdn.com/w40/iq.png" alt="العراق"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-لبنان" class="flag-link">
+                <img src="https://flagcdn.com/w40/lb.png" alt="لبنان"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+            <a href="/وظائف-الحرفيين-الأردن" class="flag-link">
+                <img src="https://flagcdn.com/w40/jo.png" alt="الأردن"
+                    class="flag-circle transition-transform duration-300 hover:scale-110">
+            </a>
+        </div>
+
+        <style>
+            .flag-circle {
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .flag-link:hover .flag-circle {
+                transform: scale(1.1);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+         {{> chatbot}}
+
+        {{> footer }} 
+
+</body>
+
+</html> 

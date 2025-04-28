@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الحرفيين - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dataTables_wrapper .dataTables_filter { float: left; }
+        .dataTables_wrapper .dataTables_length { float: right; }
+        .dataTables_wrapper .dataTables_info { float: right; }
+        .dataTables_wrapper .dataTables_paginate { float: left; }
+    </style>
+</head>
+
+<body class="bg-slate-100 font-sans flex h-screen flex-col md:flex-row">
+    {{> adminSidebar}}
+
+    <main class="flex-1 p-4 md:p-8 mt-16 md:mt-0 overflow-auto">
+        <!-- Header Section -->
+        <div class="mb-6">
+            <h2 class="text-3xl font-bold text-slate-800">قائمة الحرفيين</h2>
+            <p class="text-slate-500 mt-2">إدارة وعرض جميع الحرفيين في النظام</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-50 rounded-full">
+                        <i class="fas fa-tools text-yellow-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">إجمالي الحرفيين</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{totalArtisans}}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-50 rounded-full">
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">الحرفيين النشطين</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{activeArtisans}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-50 rounded-full">
+                        <i class="fas fa-star text-blue-500 text-xl"></i>
+                    </div>
+                    <div class="mr-4">
+                        <h3 class="text-slate-500 text-sm">متوسط التقييم</h3>
+                        <p class="text-2xl font-bold text-slate-800">{{avgRating}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-tools text-slate-400"></i>
+                        <h3 class="text-lg font-semibold text-slate-800">جميع الحرفيين</h3>
+                    </div>
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200">
+                        <i class="fas fa-plus"></i>
+                        إضافة حرفي جديد
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto bg-white rounded-lg">
+                    <table id="artisanTable" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">الرقم</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">الاسم</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">البريد الإلكتروني</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">التخصص</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">التقييم</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-slate-600">الإجراءات</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#artisanTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/ar.json'
+                },
+                ajax: {
+                    url: "/admin/users-data",
+                    data: function(d) {
+                        d.role = 'artisan';  // Add role parameter
+                    },
+                    dataSrc: function(json) {
+                        return json.map(function(item) {
+                            return {
+                                ...item,
+                                rating: parseFloat(item.rating || 0).toFixed(1),
+                                specialite: item.specialite || 'غير محدد'
+                            };
+                        });
+                    }
+                },
+                columns: [
+                    { 
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return `<span class="font-semibold text-slate-600">${meta.row + 1}</span>`;
+                        }
+                    },
+                    { 
+                        data: "nom",
+                        render: function(data, type, row) {
+                            return `<div class="font-medium text-slate-800">${data || ''}</div>`;
+                        }
+                    },
+                    { 
+                        data: "email",
+                        render: function(data, type, row) {
+                            return `<div class="text-slate-600">${data || ''}</div>`;
+                        }
+                    },
+                    { 
+                        data: "specialite",
+                        render: function(data, type, row) {
+                            return `<div class="text-slate-600">${data || 'غير محدد'}</div>`;
+                        }
+                    },
+                    { 
+                        data: "rating",
+                        render: function(data, type, row) {
+                            const rating = parseFloat(data || 0);
+                            const fullStars = Math.floor(rating);
+                            const hasHalfStar = rating % 1 >= 0.5;
+                            let stars = '★'.repeat(fullStars);
+                            if (hasHalfStar) stars += '½';
+                            stars += '☆'.repeat(5 - Math.ceil(rating));
+                            return `<div class="text-yellow-500">${stars} (${rating})</div>`;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="viewArtisan('${row.id}')" 
+                                        class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-md transition-colors duration-200">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button onclick="deleteArtisan('${row.id}')" 
+                                        class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-md transition-colors duration-200">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                responsive: true,
+                order: [[0, 'asc']],
+                pageLength: 10
+            });
+        });
+
+        function viewArtisan(id) {
+            window.location.href = `/admin/artisan/${id}`;
+        }
+
+        function deleteArtisan(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الحرفي؟')) {
+                fetch(`/admin/artisan/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#artisanTable').DataTable().ajax.reload();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+</body>
+</html>

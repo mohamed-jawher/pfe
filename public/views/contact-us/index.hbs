@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jqvmap/dist/jqvmap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jqvmap/dist/jquery.vmap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <style>
+        #vmap {
+            width: 100%;
+            height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            #vmap {
+                height: 300px;
+            }
+        }
+
+        /* Améliorations pour les petits écrans */
+        @media (max-width: 640px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .bg-white {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+{{> loginPrompt}}
+    {{> header}}
+
+    <!-- En-tête -->
+    <header class=" text-black py-8 md:py-16 text-center px-4">
+        <h1 class="text-3xl md:text-5xl font-bold mb-3">تواصل معنا</h1>
+        <p class="text-base md:text-lg">إذا كان لديك أي استفسار، لا تتردد في التواصل معنا</p>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+
+            <!-- Formulaire de contact -->
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg order-2 md:order-1 transition-all duration-300 hover:shadow-xl">
+                <h2 class="text-xl md:text-2xl font-bold mb-6 text-gray-800 border-b pb-3">أرسل لنا رسالة</h2>
+                <form id="contactForm" action="/contact-us" method="POST" class="mt-4 md:mt-6 space-y-5">
+                    <div class="mb-4 relative">
+                        <label class="block text-gray-600 font-medium mb-2">الاسم الكامل</label>
+                        <input type="text" id="name" name="name" autocomplete="off"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200" required>
+                    </div>
+                    <div class="mb-4 relative">
+                        <label class="block text-gray-600 font-medium mb-2">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" autocomplete="off"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200" required>
+                    </div>
+                    <div class="mb-4 relative">
+                        <label class="block text-gray-600 font-medium mb-2">رقم الجوال</label>
+                        <input type="tel" id="phone" name="phone" autocomplete="off"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                    </div>
+                    <div class="mb-6 relative">
+                        <label class="block text-gray-600 font-medium mb-2">الرسالة</label>
+                        <textarea id="message" name="message" rows="4" autocomplete="off"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+                            required></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center">
+                        <span>إرسال</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
+                <div class="mt-6">
+                    <p id="successMessage" class="text-green-600 text-center mt-4 hidden bg-green-50 p-3 rounded-lg border border-green-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        تم إرسال رسالتك بنجاح!
+                    </p>
+                    <p id="errorMessage" class="text-red-600 text-center mt-4 hidden bg-red-50 p-3 rounded-lg border border-red-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Informations de contact -->
+            <div class="order-1 md:order-2">
+                <p class="text-xl md:text-2xl font-bold mb-6 text-gray-800">
+                    خلال 6 سنوات، اشتغلت TN <span class="text-yellow-500">M3allim</span> في العديد من الدول حول العالم،
+                    وتقدم خدماتها لعملائها في العديد من القارات.
+                </p>
+
+                <div class="row-scroll-cut">
+                    <div id="vmap"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {{> footer}}
+
+    <script>
+        jQuery(document).ready(function () {
+            if (jQuery('#vmap').length) {
+                jQuery('#vmap').vectorMap({
+                    map: 'world_en',
+                    backgroundColor: '#fff',
+                    borderColor: '#cccccc',
+                    borderOpacity: 0.25,
+                    borderWidth: 1,
+                    color: '#8988ab',
+                    enableZoom: false,
+                    hoverColor: '#d1d1d9',
+                    hoverOpacity: null,
+                    normalizeFunction: 'linear',
+                    scaleColors: ['#b6d6ff', '#005ace'],
+                    selectedColor: '#F59E0B',
+                    multiSelectRegion: true,
+                    showTooltip: true,
+                    selectedRegions: [
+                        "AE", "BH", "KW", "OM", "QA", "SA",
+                        "DZ", "EG", "LY", "MA", "SD", "TN"
+                    ],
+                    onLabelShow: function (event, label, code) {
+                        // Affichage du label par défaut plus des informations supplémentaires si nécessaire
+                    },
+                    onRegionClick: function (event, code, region) {
+                        console.log("Région cliquée:", code);
+                    },
+                });
+            }
+        });
+ </script>
+        <!-- Replace the existing form submission script with this updated version -->
+        <script>
+             function showLoginPrompt() {
+        const modal = document.getElementById('loginPromptModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLoginPrompt() {
+        const modal = document.getElementById('loginPromptModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+            document.getElementById('contactForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+                
+                // Check if user is logged in
+                const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+                if (!isLoggedIn) {
+            showLoginPrompt();
+            return;
+        }
+               
+                
+                // Continue with form submission if logged in
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> جاري الإرسال...';
+                submitButton.disabled = true;
+        
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const message = document.getElementById('message').value;
+                const successMessage = document.getElementById('successMessage');
+                const errorMessage = document.getElementById('errorMessage');
+        
+                successMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+        
+                // Client-side validation
+                if (!email.includes('@') || message.length < 10) {
+                    errorMessage.textContent = 'يرجى إدخال بريد إلكتروني صحيح ورسالة تحتوي على 10 أحرف على الأقل.';
+                    errorMessage.classList.remove('hidden');
+                    submitButton.innerHTML = originalButtonText;
+                    submitButton.disabled = false;
+                    return;
+                }
+        
+                try {
+                    const response = await fetch('/contact-us', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, phone, message })
+                    });
+        
+                    if (response.ok) {
+                        successMessage.classList.remove('hidden');
+                        document.getElementById('contactForm').reset();
+                        
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.classList.add('hidden');
+                        }, 5000);
+                    } else {
+                        const data = await response.json();
+                        errorMessage.textContent = data.message || 'حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.';
+                        errorMessage.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorMessage.textContent = 'حدث خطأ في الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت.';
+                    errorMessage.classList.remove('hidden');
+                } finally {
+                    // Reset button state
+                    submitButton.innerHTML = originalButtonText;
+                    submitButton.disabled = false;
+                }
+            });
+        </script>
+   
+    
+    {{> chatbot}}
+</body>
+
+</html>

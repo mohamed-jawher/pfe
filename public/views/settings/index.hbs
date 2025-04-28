@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        {{> adminSidebar}}
+
+        <main class="flex-1 p-8">
+            <div class="container mx-auto">
+                <!-- Header -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-2xl font-bold text-gray-800">⚙️ إعدادات الحساب</h1>
+                        <div class="text-sm text-gray-600">
+                            <i class="fas fa-user"></i> {{user.name}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Settings Card -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            <i class="fas fa-user-circle ml-2"></i>المعلومات الشخصية
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">الاسم</label>
+                            <input type="text" id="adminName" value="{{user.name}}" 
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">البريد الإلكتروني</label>
+                            <input type="email" id="adminEmail" value="{{user.email}}" 
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button onclick="updateProfile()" 
+                            class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-200">
+                            <i class="fas fa-save ml-2"></i>حفظ التغييرات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Password Change Card -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            <i class="fas fa-key ml-2"></i>تغيير كلمة المرور
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">كلمة المرور الحالية</label>
+                            <input type="password" id="currentPassword" 
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">كلمة المرور الجديدة</label>
+                            <input type="password" id="newPassword" 
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button onclick="changePassword()" 
+                            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+                            <i class="fas fa-sync-alt ml-2"></i>تحديث كلمة المرور
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 hidden bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <span id="toastMessage"></span>
+    </div>
+    
+
+    <script>
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `fixed top-4 right-4 ${isSuccess ? 'bg-green-500' : 'bg-red-500'} text-white px-6 py-3 rounded-lg shadow-lg`;
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        async function updateProfile() {
+            const name = document.getElementById("adminName").value;
+            const email = document.getElementById("adminEmail").value;
+
+            try {
+                const response = await fetch("/admin/settings/update-profile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast("✅ تم تحديث البيانات بنجاح!");
+                } else {
+                    showToast(data.error || "حدث خطأ أثناء التحديث", false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showToast("❌ تعذر تحديث المعلومات", false);
+            }
+        }
+
+        async function changePassword() {
+            const currentPassword = document.getElementById("currentPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+
+            try {
+                const response = await fetch("/admin/settings/change-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast("✅ تم تحديث كلمة المرور بنجاح!");
+                    document.getElementById("currentPassword").value = "";
+                    document.getElementById("newPassword").value = "";
+                } else {
+                    showToast(data.error || "فشل تحديث كلمة المرور", false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showToast("❌ فشل تحديث كلمة المرور", false);
+            }
+        }
+    </script>
+</body>
+</html>

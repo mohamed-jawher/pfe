@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="icon" type="image/png" href="/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-slate-50 flex">
+    {{> artisanSidebar active='report'}}
+
+    <main class="flex-1 p-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-slate-800 mb-4">
+                        <i class="fas fa-exclamation-circle ml-2"></i>الإبلاغ عن مشكلة
+                    </h1>
+                    <p class="text-slate-600">ساعدنا في تحسين خدماتنا من خلال الإبلاغ عن المشاكل التي واجهتها</p>
+                </div>
+
+                <form id="reportForm" class="space-y-8">
+                    <!-- Navigation Issues -->
+                    <div class="bg-slate-50 rounded-lg p-6 transition-all hover:shadow-md">
+                        <h3 class="text-xl font-semibold text-slate-700 mb-4 flex items-center">
+                            <span class="bg-slate-200 text-slate-700 rounded-full w-8 h-8 flex items-center justify-center ml-3">1</span>
+                            هل واجهت مشاكل في التصفح أو تحميل الصفحات؟
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="navigation" value="5" class="form-radio text-yellow-500">
+                                <span class="mr-3">نعم، مشكلة كبيرة جداً</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="navigation" value="3" class="form-radio text-yellow-500">
+                                <span class="mr-3">مشكلة متوسطة</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="navigation" value="1" class="form-radio text-yellow-500">
+                                <span class="mr-3">لا توجد مشاكل</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Design Issues -->
+                    <div class="bg-slate-50 rounded-lg p-6 transition-all hover:shadow-md">
+                        <h3 class="text-xl font-semibold text-slate-700 mb-4 flex items-center">
+                            <span class="bg-slate-200 text-slate-700 rounded-full w-8 h-8 flex items-center justify-center ml-3">2</span>
+                            هل لاحظت أخطاء في التصميم أو طريقة العرض؟
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="design" value="5" class="form-radio text-yellow-500">
+                                <span class="mr-3">نعم، في كثير من الأحيان</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="design" value="3" class="form-radio text-yellow-500">
+                                <span class="mr-3">أحياناً</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-white rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                                <input type="radio" name="design" value="1" class="form-radio text-yellow-500">
+                                <span class="mr-3">لا توجد مشاكل</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="bg-slate-50 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-slate-700 mb-4 flex items-center">
+                            <i class="fas fa-comments ml-2"></i>
+                            ملاحظات إضافية
+                        </h3>
+                        <textarea name="comments" rows="4" 
+                            class="w-full p-4 border border-slate-200 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                            placeholder="اكتب ملاحظاتك هنا..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" 
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                            <i class="fas fa-paper-plane ml-2"></i>
+                            إرسال التقرير
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        try {
+            const response = await fetch('/artisan/report-problem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('تم إرسال تقريرك بنجاح!');
+               
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء إرسال التقرير');
+        }
+    });
+    </script>
+</body>
+</html>
